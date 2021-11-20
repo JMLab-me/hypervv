@@ -2,8 +2,8 @@ source "hyperv-iso" "ubuntu-2004-gen1" {
     iso_url = var.iso_url
     iso_checksum = var.iso_checksum
 
-    ssh_username = var.ssh_username
-    ssh_password = var.ssh_password
+    ssh_username = var.username
+    ssh_password = var.password
     ssh_timeout = var.ssh_timeout
 
     http_directory = var.http_directory
@@ -17,7 +17,7 @@ source "hyperv-iso" "ubuntu-2004-gen1" {
         "autoinstall ds=nocloud-net;s=${var.cloud_init_uri}<wait><enter>"
     ]
 
-    shutdown_command = "echo 'vagrant' | sudo -S shutdown -P now"
+    shutdown_command = "echo '${var.username}' | sudo -S shutdown -P now"
 
     keep_registered = var.keep_registered
 }
@@ -30,11 +30,14 @@ source "hyperv-iso" "ubuntu-2004-gen2" {
     iso_url = var.iso_url
     iso_checksum = var.iso_checksum
 
-    ssh_username = var.ssh_username
-    ssh_password = var.ssh_password
+    ssh_username = var.username
+    ssh_password = var.password
     ssh_timeout = var.ssh_timeout
 
     http_directory = var.http_directory
+
+    headless = var.headless
+    switch_name = var.switch_name
 
     boot_wait = var.boot_wait
     boot_command = [
@@ -46,7 +49,8 @@ source "hyperv-iso" "ubuntu-2004-gen2" {
         "boot<enter>"
     ]
 
-    shutdown_command = "echo 'vagrant' | sudo -S shutdown -P now"
+    shutdown_command = "echo '${var.username}' | sudo -S shutdown -P now"
 
     keep_registered = var.keep_registered
+    output_directory = "${var.output_dir}/${var.output_hv}"
 }

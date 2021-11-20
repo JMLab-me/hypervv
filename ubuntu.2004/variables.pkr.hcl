@@ -8,11 +8,11 @@ variable "iso_checksum" {
     default = "f8e3086f3cea0fb3fefb29937ab5ed9d19e767079633960ccb50e76153effc98"
 }
 
-variable "ssh_username" {
+variable "username" {
     type = string
 }
 
-variable "ssh_password" {
+variable "password" {
     type = string
     sensitive = true
 }
@@ -20,6 +20,15 @@ variable "ssh_password" {
 variable "ssh_timeout" {
     type = string
     default = "7200s"
+}
+
+variable "headless" {
+    type = bool
+    default = false
+}
+
+variable "switch_name" {
+    type = string
 }
 
 variable "boot_wait" {
@@ -32,6 +41,7 @@ variable "http_directory" {
 
 variable "cloud_init_uri" {
     type = string
+    default = "http://{{.HTTPIP}}:{{.HTTPPort}}/cloud-init/ubuntu.2004/"
 }
 
 variable "keep_registered" {
@@ -42,4 +52,18 @@ variable "keep_registered" {
 variable "keep_input_artifact" {
     type = bool
     default = false
+}
+
+variable "output_dir" {
+    type = string
+    default = "build/ubuntu.2004"
+}
+
+variable "output_hv" {
+    type = string
+}
+
+variable "output_box" {
+    type = string
+    default = "packer_{{.BuildName}}_{{.Provider}}.box"
 }

@@ -1,8 +1,17 @@
 packer_cache/
-output-*
-*.box
+build/
 
 *.tmp
 *.bak
 
 .vagrant
+
+# Python
+venv/
+__pycache__/
+.mypy_cache/
+
+## doit
+.doit*
+
+.env

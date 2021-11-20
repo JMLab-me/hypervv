@@ -1,0 +1,29 @@
+box_url = ENV["BOX_URL"] || "file://../../build/ubuntu.2004/packer_ubuntu-2004-gen2_hyperv.box"
+network_bridge = ENV["HYPERVV_SWITCH_NAME"] || "External Switch"
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "hypervv/Ubuntu2004"
+    config.vm.box_url = box_url
+
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    config.vm.network "public_network", bridge: network_bridge
+
+    config.vm.provider "hyperv" do |hv|
+        hv.vmname = "ubuntu.2004.test"
+
+        config.trigger.before :"VagrantPlugins::HyperV::Action::StartInstance", type: :action do |t|
+            t.warn = "HyperV before start instance..."
+            t.run = {
+              path: "scripts/before_start_instance.ps1",
+              args: ["-VmName", "ubuntu.2004.test"]
+            }
+        end
+
+        # hv.enable_enhanced_session_mode = true
+        # hv.vm_integration_services = {
+        #     guest_service_interface: true
+        # }
+    end
+
+end

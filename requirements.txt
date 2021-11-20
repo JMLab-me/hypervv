@@ -1,0 +1,4 @@
+doit
+requests
+pycdlib
+python-dotenv

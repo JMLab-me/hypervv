@@ -1,0 +1,106 @@
+name: Build and publish vagrant box
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Restore ISO files from local cache
+        run: |
+          .github/scripts/Restore-LocalCache.ps1 `
+            -Key "iso" -CachePath "${{ runner.tool_cache }}"
+
+      - name: Build vagrant boxes
+        run: "doit build_ubuntu_2004"
+        env:
+          HYPERVV_HEADLESS: true
+          HYPERVV_SWITCH_NAME: External Switch
+
+      - name: Upload ISO files to local cache
+        run: |
+          .github/scripts/Upload-LocalCache.ps1 `
+            -Key "iso" -Targets "packer_cache" -CachePath "${{ runner.tool_cache }}"
+
+      - name: Upload artifact as local cache
+        run: |
+          .github/scripts/Upload-LocalCache.ps1 `
+            -Key "artifact_ubuntu_2004" `
+            -Targets ("build/ubuntu.2004/packer_ubuntu-2004-gen2_hyperv.box", ".doit.db.dat", ".doit.db.dir") `
+            -CachePath "${{ runner.tool_cache }}"
+
+  test:
+    runs-on: self-hosted
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Restore artiface from local cache
+        run: |
+          .github/scripts/Restore-LocalCache.ps1 `
+            -Key "artifact_ubuntu_2004" -CachePath "${{ runner.tool_cache }}"
+
+      - name: Test vagrant box
+        run: doit test_ubuntu_2004
+        env:
+          VAGRANT_EXPERIMENTAL: typed_triggers
+          HYPERVV_SWITCH_NAME: External Switch
+
+  publish:
+    runs-on: self-hosted
+    needs: [test]
+    steps:
+      # Required due to the weg Git works, without it this action won't be able to find any or the correct tags
+      # See https://github.com/actions/checkout#fetch-all-history-for-all-tags-and-branches
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Restore artiface from local cache
+        run: |
+          .github/scripts/Restore-LocalCache.ps1 `
+            -Key "artifact_ubuntu_2004" -CachePath "${{ runner.tool_cache }}"
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDD
+          utcOffset: "+09:00"
+
+      - name: Get previous tag
+        id: latest-tag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Publish box
+        env:
+          VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
+          BOX_VERSION: ${{ steps.latest-tag.outputs.tag }}.${{ steps.current-time.outputs.formattedTime }}
+          HYPERVV_HEADLESS: true
+          HYPERVV_SWITCH_NAME: External Switch
+        run: |
+          Start-Process -FilePath doit -ArgumentList (
+            "login_vagrant_cloud", "--token", "$env:VAGRANT_CLOUD_TOKEN",
+            "publish_ubuntu_2004", "--version", "$env:BOX_VERSION"
+          ) -Wait
