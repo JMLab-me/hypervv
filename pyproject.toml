@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=42", "setuptools_scm[toml]>=3.4"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hypervv"
+description = "Packer Hyper-V Gen2 images"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+  {email = "sof.midnight@live.co.kr"},
+  {name = "Suh Junmin"}
+]
+maintainers = [
+  {name = "Suh Junmin", email = "sof.midnight@live.co.kr"}
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+dynamic = ["version"]
+
+dependencies = [
+  "doit"
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest"
+]
+dev = [
+  "pytest",
+  "mypy",
+  "mypy-extensions",
+  "black",
+  "pylint",
+  "pylint_pydantic"
+]
+builder = [
+  "build"
+]
+
+[tool.setuptools_scm]
+write_to = "hypervv/_version.py"
+
+[tool.mypy]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "mysqlx"
+ignore_missing_imports = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
