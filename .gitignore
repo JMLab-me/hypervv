@@ -17,4 +17,19 @@ dist/
 ## Pytest
 .pytest_cache/
 
+## doit
+.doit.*
+
+# Packer
+build/
+packer_cache/
+
+# Project
 hypervv/_version.py
+.env
+
+# Nodejs
+node_modules/
+
+# vagrant
+.vagrant/
