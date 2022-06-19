@@ -33,3 +33,8 @@ node_modules/
 
 # vagrant
 .vagrant/
+
+# vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/*.template
