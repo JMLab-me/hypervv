@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import (
     TYPE_CHECKING,
     Any,
+    Callable,
     List,
     Union,
     Collection,
@@ -15,6 +16,8 @@ from mmap import mmap, ACCESS_READ
 import hashlib
 
 import requests
+
+from hypervv.vagrant import Vagrant
 
 if TYPE_CHECKING:
     from os import PathLike
@@ -96,3 +99,23 @@ def build_packer_command(
     cmd += f' "{project}"'
 
     return cmd
+
+
+def test_vagrant_box(cwd: Path) -> Callable[[], bool]:
+    def _execute() -> bool:
+        vagrant = Vagrant(cwd)
+
+        status = vagrant.status()[0]
+
+        if status.state == "running":
+            vagrant.destroy()
+
+        try:
+            if vagrant.up() != 0:
+                return False
+        finally:
+            vagrant.destroy()
+
+        return True
+
+    return _execute
