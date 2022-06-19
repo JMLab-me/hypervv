@@ -15,6 +15,7 @@ from typing import (
 from mmap import mmap, ACCESS_READ
 import hashlib
 
+import chardet
 import requests
 
 from hypervv.vagrant import Vagrant
@@ -119,3 +120,10 @@ def test_vagrant_box(cwd: Path) -> Callable[[], bool]:
         return True
 
     return _execute
+
+
+def decode(source: Any) -> str:
+    enc = chardet.detect(source)
+    decoded = source.decode(enc["encoding"])
+
+    return decoded

@@ -25,7 +25,8 @@ dependencies = [
   "doit",
   "pycdlib",
   "requests",
-  "python-dotenv"
+  "python-dotenv",
+  "chardet"
 ]
 
 [project.optional-dependencies]
@@ -37,6 +38,7 @@ dev = [
   "mypy",
   "mypy-extensions",
   "types-requests",
+  "types-chardet",
   "black"
 ]
 builder = [
