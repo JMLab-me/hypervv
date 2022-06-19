@@ -4,7 +4,6 @@ from .tasks import (
     task_opensuse_microos_build_secondary_iso,
     task_opensuse_microos_create_vm,
     task_opensuse_microos_build,
-    task_opensuse_microos_remove_vm,
 )
 
 __all__ = [
@@ -13,5 +12,4 @@ __all__ = [
     "task_opensuse_microos_build_secondary_iso",
     "task_opensuse_microos_create_vm",
     "task_opensuse_microos_build",
-    "task_opensuse_microos_remove_vm",
 ]

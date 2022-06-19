@@ -8,6 +8,9 @@ source "hyperv-vmcx" "opensuse_microos" {
 
     secondary_iso_images = [ "${var.secondary_iso}" ]
 
+    enable_secure_boot = true
+    secure_boot_template = "MicrosoftUEFICertificateAuthority"
+
     switch_name = "${var.switch_name}"
     headless = "${var.headless}"
     ssh_timeout = "${var.ssh_timeout}"

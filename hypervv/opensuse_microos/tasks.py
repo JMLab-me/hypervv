@@ -5,11 +5,14 @@ from typing import Any, Dict
 import lzma
 import importlib.resources
 import subprocess
-from hypervv.hyperv_utils import delete_vm_by_name, get_vm_id
 
+import chardet
+
+from hypervv.hyperv_utils import create_vm, delete_vm_by_name, get_vm_id
 from hypervv.iso_image import IsoFileMap, generate_iso
 from hypervv.utils import (
     calculate_sha256,
+    decode,
     download_file_from_url,
     gen_file_list,
     build_packer_command,
@@ -90,31 +93,16 @@ def task_opensuse_microos_build_secondary_iso() -> Dict[str, Any]:
 
 def task_opensuse_microos_create_vm() -> Dict[str, Any]:
     target = Path(f"packer_cache/{name}.vm_id.txt")
-    script = importlib.resources.path("hypervv.scripts", "New-VmFromVhdx.ps1")
 
     def _execute() -> None:
-        subprocess.run(
-            [
-                "powershell.exe",
-                "-NoProfile",
-                "-WindowStyle",
-                "Hidden",
-                "-File",
-                str(script),
-                "-Name",
-                name,
-                "-MemoryBytes",
-                "1073741824",
-                "-SwitchName",
-                os.getenv("HYPERVV_SWITCH_NAME", ""),
-                "-DiskPath",
-                str(vhdx_path.absolute()),
-            ],
-            capture_output=True,
-        )
+        try:
+            vm_id = create_vm(name, os.getenv("HYPERVV_SWITCH_NAME", ""), vhdx_path)
+        except subprocess.CalledProcessError as e:
+            print(decode(e.stderr))
+            raise
 
         with (open(target, "w")) as f:
-            f.write(get_vm_id(name))
+            f.write(vm_id)
 
     uptodate = False
     if target.exists():
@@ -154,21 +142,9 @@ def task_opensuse_microos_build() -> Dict[str, Any]:
         "file_dep": gen_file_list(file_deps),
         "setup": ["opensuse_microos_create_vm"],
         "task_dep": ["opensuse_microos_build_secondary_iso"],
-        "teardown": ["opensuse_microos_remove_vm"],
+        "teardown": [(delete_vm_by_name, (name,))],
         "targets": [output_box],
     }
-
-
-def task_opensuse_microos_remove_vm() -> Dict[str, Any]:
-    def _execute() -> None:
-        id = get_vm_id(name)
-
-        if id == "":
-            return
-
-        delete_vm_by_name(name)
-
-    return {"actions": [_execute]}
 
 
 def task_opensuse_microos_test() -> Dict[str, Any]:
