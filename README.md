@@ -2,6 +2,11 @@
 
 Packer templates for hyperv generation 2
 
+## Fetures
+
+- Hyper-V Generation 2 images
+- Secure boot enabled
+
 ## Prerequisite
 
 - Python
@@ -19,7 +24,12 @@ Packer templates for hyperv generation 2
 
    - `pip install .`
 
-2. Build image (commands are described in the below section)
+2. setup dotenv
+
+   1. copy .env.sample to .env
+   2. fill sample as you want
+
+3. Build image (commands are described in the below section)
 
 ### Ubuntu 2004 (focal)
 
