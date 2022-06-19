@@ -16,8 +16,8 @@ class IsoFileMap:
 
 def generate_iso(
     mapping: Collection[IsoFileMap],
-    dependencies: Collection[str],
-    targets: Collection[str],
+    dependencies: Collection[Path],
+    targets: Collection[Path],
     label: str = "Data",
 ) -> Path:
     """
@@ -77,17 +77,15 @@ def generate_iso(
 
 
 def _build_iso_paths(
-    mapping: Collection[IsoFileMap], dependencies: Collection[str]
+    mapping: Collection[IsoFileMap], dependencies: Collection[Path]
 ) -> Mapping[Path, Collection[Path]]:
     file_map: Mapping[Path, List[Path]] = defaultdict(list)
 
     resolved: List[Path] = []
     for dep in dependencies:
-        p = Path(dep)
+        assert dep.exists()
 
-        assert p.exists()
-
-        _resolve(p, resolved, 1)
+        _resolve(dep, resolved, 1)
 
     for p in resolved:
         file_added: bool = False
