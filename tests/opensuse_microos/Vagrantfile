@@ -1,0 +1,27 @@
+ENV["VAGRANT_EXPERIMENTAL"] = "typed_triggers"
+
+box_url = ENV["BOX_URL"] || "file://../../build/opensuse.microos/packer_opensuse_microos_hyperv_gen2.box"
+network_bridge = ENV["HYPERVV_SWITCH_NAME"] || "External Switch"
+
+vm_name = "opensuse.microos.test"
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "hypervv/OpenSUSE-MicroOS"
+    config.vm.box_url = box_url
+
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    config.vm.network "public_network", bridge: network_bridge
+
+    config.vm.provider "hyperv" do |hv|
+        hv.vmname = vm_name
+
+        config.trigger.before :"VagrantPlugins::HyperV::Action::StartInstance", type: :action do |t|
+            t.warn = "HyperV before start instance..."
+            t.run = {
+              path: "../scripts/before_start_instance.ps1",
+              args: ["-VmName", vm_name]
+            }
+        end
+    end
+end

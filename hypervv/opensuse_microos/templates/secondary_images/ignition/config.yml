@@ -1,0 +1,32 @@
+variant: fcos
+version: 1.4.0
+storage:
+  filesystems:
+    - path: /home
+      device: /dev/sda3
+      format: btrfs
+      wipe_filesystem: false
+      mount_options:
+        - "subvol=/@/home"
+  files:
+    - path: /etc/ssh/sshd_config.d/10-enable-passwords.conf
+      mode: 0644
+      contents:
+        inline: |
+          # Opensuse kubic disbles SSH password login by default.
+          # Enable it.
+          PasswordAuthentication yes
+    - path: /etc/sudoers
+      append:
+        - inline: |
+            vagrant ALL=NOPASSWD: ALL
+passwd:
+  users:
+    - name: vagrant
+      # vagrant
+      password_hash: "$6$3hSmcCYNG1vclnkY$rbKjq/N6GCsyGxc6U5S7mS/pAiyv5M70h5.YMJp4F1hXEJqglrNmeK4vi3Htb38G5ZbCIQ7QdQwXdtoHOMf/W."
+      # vagrant insecure ssh key
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
+    - name: root
+      password_hash: "$6$3hSmcCYNG1vclnkY$rbKjq/N6GCsyGxc6U5S7mS/pAiyv5M70h5.YMJp4F1hXEJqglrNmeK4vi3Htb38G5ZbCIQ7QdQwXdtoHOMf/W."
