@@ -16,7 +16,7 @@ var_files = [
 ]
 
 
-def task_build_ubuntu_2004() -> Dict[str, Any]:
+def task_ubuntu_2004_build() -> Dict[str, Any]:
 
     file_dep_inc = [
         # Default configs
@@ -43,8 +43,10 @@ def task_build_ubuntu_2004() -> Dict[str, Any]:
     }
 
 
-def task_test_ubuntu_2004() -> Dict[str, Any]:
+def task_ubuntu_2004_test() -> Dict[str, Any]:
+    test_root = Path("tests/ubuntu_2004")
+
     return {
-        "actions": [test_vagrant_box(Path("tests/ubuntu_2004"))],
-        "task_dep": ["build_ubuntu_2004"],
+        "actions": [test_vagrant_box(test_root)],
+        "task_dep": ["ubuntu_2004_build"],
     }
