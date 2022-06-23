@@ -31,19 +31,28 @@ Packer templates for hyperv generation 2
 
 3. Build image (commands are described in the below section)
 
-### Ubuntu 2004 (focal)
+### Ubuntu 2004 LTS (focal)
 
 - Build command
-  - `python -m hypervv build_ubuntu_2004`
+  - `python -m hypervv ubuntu_2004_build`
 - Output directory
   - `build/ubuntu.2004`
 - Sample vagrant
   - `tests/ubuntu_2004`
 
+### Ubuntu 2204 (jammy)
+
+- Build command
+  - `python -m hypervv ubuntu_2204_build`
+- Output directory
+  - `build/ubuntu.2204`
+- Sample vagrant
+  - `tests/ubuntu_2204`
+
 ### OpenSUSE MicroOS
 
 - Build command
-  - `python -m hypervv build_opensuse_microos`
+  - `python -m hypervv opensuse_microos_build`
 - Output directory
   - `build/opensuse.microos`
 - Sample vagrant
