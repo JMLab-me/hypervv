@@ -1,0 +1,34 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US.UTF-8
+  keyboard:
+    layout: en
+    variant: us
+  storage:
+    layout:
+      name: lvm
+  identity:
+    username: vagrant
+    hostname: ubuntu2204.local
+    password: "$6$VDxo8B/Kp9$Nx4yjzIjVShP.hXu/izLzM67ug24q2KdXGdPcOgi0Sr6W8J55M9p8GCEONeqVlB1j7A9.6t7ra3D4g9nxqbOG."
+  ssh:
+    install-server: yes
+    allow-pw: yes
+  apt:
+    geoip: false
+  packages:
+    - linux-azure
+  output:
+    init: "> /var/log/cloud-init.log"
+    config: [">> /tmp/foo.out", "> /var/log/cloud-config.log"]
+    final:
+      output: "| tee /tmp/final.stdout | tee /var/log/cloud-final.log"
+      error: "&1"
+  final_message: "System installation complete."
+  early-commands:
+    - systemctl stop sshd
+  late-commands:
+    - echo 'Defaults:vagrant !requiretty' > /target/etc/sudoers.d/vagrant
+    - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >> /target/etc/sudoers.d/vagrant
+    - chmod 440 /target/etc/sudoers.d/vagrant

@@ -1,0 +1,27 @@
+ENV["VAGRANT_EXPERIMENTAL"] = "typed_triggers"
+
+box_url = ENV["BOX_URL"] || "file://../../build/ubuntu.2204/packer_ubuntu-2204-gen2_hyperv.box"
+network_bridge = ENV["HYPERVV_SWITCH_NAME"] || "External Switch"
+
+vm_name = "ubuntu.2204.test"
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "hypervv/Ubuntu2204"
+    config.vm.box_url = box_url
+
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    config.vm.network "public_network", bridge: network_bridge
+
+    config.vm.provider "hyperv" do |hv|
+        hv.vmname = vm_name
+
+        config.trigger.before :"VagrantPlugins::HyperV::Action::StartInstance", type: :action do |t|
+            t.warn = "HyperV before start instance..."
+            t.run = {
+              path: "../scripts/before_start_instance.ps1",
+              args: ["-VmName", vm_name]
+            }
+        end
+    end
+end
