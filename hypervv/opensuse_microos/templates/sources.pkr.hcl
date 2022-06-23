@@ -1,4 +1,4 @@
-source "hyperv-vmcx" "opensuse_microos" {
+source "hyperv-vmcx" "opensuse-microos-gen2" {
     clone_from_vm_name = "OpenSUSE.MicroOS"
 
     shutdown_command = "echo '${var.username}' | sudo -S shutdown -P now"

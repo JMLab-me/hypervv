@@ -31,7 +31,7 @@ var_files = [
     Path("defaults/default.credential.pkrvars.hcl"),
     Path("defaults/default.linux.pkrvars.hcl"),
 ]
-output_box = Path("build/opensuse.microos/packer_opensuse_microos_hyperv_gen2.box")
+output_box = Path("build/opensuse.microos/packer_opensuse-microos-gen2_hyperv.box")
 
 
 def task_opensuse_microos_download_vhdx() -> Dict[str, Any]:
@@ -126,7 +126,7 @@ def task_opensuse_microos_create_vm() -> Dict[str, Any]:
 
 
 def task_opensuse_microos_build() -> Dict[str, Any]:
-    file_deps = [*var_files, root]
+    file_deps = [*var_files, root, vhdx_path, secondary_iso]
 
     action = build_packer_command(
         project=root,
@@ -141,7 +141,10 @@ def task_opensuse_microos_build() -> Dict[str, Any]:
         "actions": [action],
         "file_dep": gen_file_list(file_deps),
         "setup": ["opensuse_microos_create_vm"],
-        "task_dep": ["opensuse_microos_build_secondary_iso"],
+        "task_dep": [
+            "opensuse_microos_extract_vhdx",
+            "opensuse_microos_build_secondary_iso",
+        ],
         "teardown": [(delete_vm_by_name, (name,))],
         "targets": [output_box],
     }

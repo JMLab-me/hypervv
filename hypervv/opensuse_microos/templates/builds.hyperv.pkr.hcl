@@ -1,9 +1,11 @@
 build {
     sources = [
-        "source.hyperv-vmcx.opensuse_microos"
+        "source.hyperv-vmcx.opensuse-microos-gen2"
     ]
 
     post-processor "vagrant" {
-        output = "${var.output_dir}/${var.output_box}_gen2.box"
+        keep_input_artifact = var.keep_input_artifact
+        vagrantfile_template = "templates/Vagrantfile.template"
+        output = "${var.output_dir}/${var.output_box}"
     }
 }

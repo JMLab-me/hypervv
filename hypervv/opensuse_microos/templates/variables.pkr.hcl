@@ -22,6 +22,11 @@ variable "secondary_iso" {
     type = string
 }
 
+variable "keep_input_artifact" {
+    type = bool
+    default = false
+}
+
 variable "output_dir" {
     type = string
     default = "build/opensuse.microos"
@@ -29,5 +34,5 @@ variable "output_dir" {
 
 variable "output_box" {
     type = string
-    default = "packer_{{.BuildName}}_{{.Provider}}"
+    default = "packer_{{.BuildName}}_{{.Provider}}.box"
 }
