@@ -11,7 +11,7 @@ cloud_init = Path("http/cloud-init/ubuntu.2004")
 
 var_files = [
     Path("defaults/default.pkrvars.hcl"),
-    Path("defaults/default.credential.pkrvars.hcl"),
+    Path("defaults/default.linux.credential.pkrvars.hcl"),
     Path("defaults/default.linux.pkrvars.hcl"),
 ]
 

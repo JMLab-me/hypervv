@@ -28,7 +28,7 @@ vhdx_path = Path("packer_cache/openSUSE-MicroOS.x86_64-MS-HyperV.vhdx")
 secondary_iso = Path("packer_cache/openSUSE-MicroOS.x86_64-MS-HyperV-secondary-iso.iso")
 var_files = [
     Path("defaults/default.pkrvars.hcl"),
-    Path("defaults/default.credential.pkrvars.hcl"),
+    Path("defaults/default.linux.credential.pkrvars.hcl"),
     Path("defaults/default.linux.pkrvars.hcl"),
 ]
 output_box = Path("build/opensuse.microos/packer_opensuse-microos-gen2_hyperv.box")
