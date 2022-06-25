@@ -49,7 +49,7 @@ source "hyperv-iso" "ubuntu-2004-gen2" {
         "boot<enter>"
     ]
 
-    first_boot_device = "SCSI:0:0"
+    first_boot_device = "DVD"
 
     shutdown_command = "echo '${var.username}' | sudo -S shutdown -P now"
 
