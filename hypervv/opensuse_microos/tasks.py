@@ -3,10 +3,7 @@ from pathlib import Path
 import tempfile
 from typing import Any, Dict
 import lzma
-import importlib.resources
 import subprocess
-
-import chardet
 
 from hypervv.hyperv_utils import create_vm, delete_vm_by_name, get_vm_id
 from hypervv.iso_image import IsoFileMap, generate_iso
