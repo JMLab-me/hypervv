@@ -41,7 +41,7 @@ variable "http_directory" {
 
 variable "cloud_init_uri" {
     type = string
-    default = "http://{{.HTTPIP}}:{{.HTTPPort}}/cloud-init/ubuntu.2204/"
+    default = "http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu.2204/"
 }
 
 variable "keep_registered" {

@@ -7,10 +7,11 @@ from hypervv.utils import gen_file_list, build_packer_command, test_vagrant_box
 name = "Ubuntu2004"
 root = Path(__file__).resolve().parent / "templates"
 output_box = Path("build/ubuntu.2004/packer_ubuntu-2004-gen2_hyperv.box")
-cloud_init = Path("http/cloud-init/ubuntu.2004")
+cloud_init = Path("http/ubuntu.2004")
 
 var_files = [
     Path("defaults/default.pkrvars.hcl"),
+    Path("defaults/default.http.pkrvars.hcl"),
     Path("defaults/default.linux.credential.pkrvars.hcl"),
     Path("defaults/default.linux.pkrvars.hcl"),
 ]
