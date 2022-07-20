@@ -32,11 +32,14 @@ def generate_iso(
 
     :param mapping: remap or rename files (support files only)
     :param dependencies: files or directories to include (both files and directories are supported)
-    :param targets: ISO image output (only first element of list is used)
+    :param targets: ISO image output (due to the doit framework, only first element of list is used)
     :param label: Label of ISO file (default value is "Data")
     """
 
     iso = PyCdlib()
+    # Some automation tools(ignition) require specific volume label.
+    # But due to limitation of pycdlib, cannot use UDF format
+    # see https://github.com/clalancette/pycdlib/issues/40
     iso.new(joliet=3, vol_ident=label)
 
     target = Path(next(iter(targets), ""))
