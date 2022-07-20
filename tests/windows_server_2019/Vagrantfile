@@ -1,12 +1,12 @@
 ENV["VAGRANT_EXPERIMENTAL"] = "typed_triggers"
 
-box_url = ENV["BOX_URL"] || "file://../../build/windows_server.2019/packer_windows-server-2019-gen2_hyperv.box"
+box_url = ENV["BOX_URL"] || "file://../../build/windows_server.2019/packer_windows-server-2019-standard-gen2_hyperv.box"
 network_bridge = ENV["HYPERVV_SWITCH_NAME"] || "External Switch"
 
-vm_name = "windows_server.2019.test"
+vm_name = "windows_server.2019.standard.test"
 
 Vagrant.configure("2") do |config|
-    config.vm.box = "hypervv/WindowsServer2019"
+    config.vm.box = "hypervv/WindowsServer2019Standard"
     config.vm.box_url = box_url
 
     config.vm.synced_folder ".", "/vagrant", disabled: true
@@ -25,10 +25,9 @@ Vagrant.configure("2") do |config|
         end
     end
 
-    config.vm.communicator = "winrm"
-    config.winrm.username = "Administrator"
-    config.winrm.password = "vagrant"
-    config.winrm.timeout = 3600
-    config.winrm.transport = "negotiate"
-    config.winrm.ssl_peer_verification = false
+    # config.vm.communicator = "winrm"
+    # config.winrm.port = 5986
+    # config.winrm.timeout = 3600
+    # config.winrm.transport = "ssl"
+    # config.winrm.ssl_peer_verification = false
 end

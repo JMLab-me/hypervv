@@ -20,15 +20,15 @@ var_files = [
 
 
 def task_windows_server_2019_build_secondary_iso() -> Dict[str, Any]:
-    deps = gen_file_list([root / "secondary_images"])
+    deps = gen_file_list([root / "secondary_images", Path("scripts/windows")])
     target = secondary_iso
     maps = [
         IsoFileMap(
-            file_dep=root / "secondary_images/Autounattend.ServerCore.xml",
+            file_dep=root / "secondary_images/Autounattend.Standard.xml",
             iso_mapping=Path("/Autounattend.xml"),
         ),
         IsoFileMap(
-            file_dep=root / "secondary_images/Answerfile.Sysprep.ServerCore.xml",
+            file_dep=root / "secondary_images/Answerfile.Sysprep.xml",
             iso_mapping=Path("/Answerfile.Sysprep.xml"),
         ),
     ]

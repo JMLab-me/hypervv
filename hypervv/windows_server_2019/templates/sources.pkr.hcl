@@ -1,4 +1,4 @@
-source "hyperv-iso" "windows-server-2019-gen2" {
+source "hyperv-iso" "windows-server-2019-standard-gen2" {
     generation = 2
     enable_secure_boot = true
 
@@ -11,6 +11,7 @@ source "hyperv-iso" "windows-server-2019-gen2" {
     winrm_timeout = var.winrm_timeout
     winrm_use_ssl = true
     winrm_insecure = true
+    winrm_use_ntlm = true
 
     headless = var.headless
     switch_name = var.switch_name
@@ -24,7 +25,8 @@ source "hyperv-iso" "windows-server-2019-gen2" {
 
     secondary_iso_images = [ "${var.secondary_iso}" ]
 
-    shutdown_command = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
+    shutdown_command = "E:\\PackerShutdown.cmd"
+    shutdown_timeout = "1h"
 
     keep_registered = var.keep_registered
     output_directory = "${var.output_dir}/${var.output_hv}"
