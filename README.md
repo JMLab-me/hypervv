@@ -57,3 +57,9 @@ Packer templates for hyperv generation 2
   - `build/opensuse.microos`
 - Sample vagrant
   - `tests/opensuse_microos`
+
+# References
+
+- [packer-kvm](https://github.com/goffinet/packer-kvm)
+- [packer-Win2019](https://github.com/eaksel/packer-Win2019)
+- [Best Practices with Packer and Windows](https://hodgkins.io/best-practices-with-packer-and-windows#disable-winrm-on-build-completion-and-only-enable-it-on-first-boot)
